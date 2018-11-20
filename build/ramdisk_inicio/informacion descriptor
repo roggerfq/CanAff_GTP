@@ -1,0 +1,76 @@
+Interest point detectors/descriptors implemented by Krystian.Mikolajczyk@inrialpes.fr
+at INRIA Rhone-Alpes.[ref. www.inrialpes.fr/movi/people/Mikolajczyk/Affine]
+Options:
+Interest points:
+     -harlap - harris-laplace detector
+     -heslap - hessian-laplace detector
+     -haraff - harris-affine detector
+     -hesaff - hessian-affine detector
+     -harhes - harris-hessian-laplace detector
+     -sedgelap - edge-laplace detector
+     -harThres harris threshold [10]
+     -hesThres  hessian threshold [200]
+     -edgeLThres  lower canny threshold [5]
+     -edgeHThres  higher canny threshold [10]
+Descriptors:
+     -jla  - steerable filters,  similarity= 
+     -sift - sift [D. Lowe],  similarity=
+     -msift - Mahalanobis sift, similarity= 
+     -gloh - extended sift,  similarity= 
+     -mom  - moments,  similarity= 
+     -koen - differential invariants,  similarity= 
+     -cf   - complex filters [F. Schaffalitzky],  similarity=
+     -sc   - shape context,  similarity=45000 
+     -spin - spin,  similarity= 
+     -gpca - gradient pca [Y. Ke],  similarity=
+     -cc - cross correlation,  similarity=
+Input/Output:
+     -i image.pgm  - input image pgm, ppm, png
+     -params params.par - file with parameter settings
+     -pca input.basis - projects the descriptors with pca basis
+     -p1 image.pgm.points - input regions format 1
+     -p2 image.pgm.points - input regions format 2
+     -o1 out.desc - saves descriptors in out.desc output format1
+     -o2 out.desc - saves descriptors in out.desc output format2
+     -noangle - computes rotation variant descriptors (no rotation esimation)
+     -DP - draws features as points in out.desc.png
+     -DC - draws regions as circles in out.desc.png
+     -DE - draws regions as ellipses in out.desc.png
+     -c 255 - draws points in grayvalue [0,...,255]
+example:       ./extract_features_64bit.ln -sift -i image.png -p1 image.png.points -DR 
+               ./extract_features_64bit.ln -harhes -sift -i image.png  -DC -pca harhessift.basis
+
+               ./extract_features_64bit.ln -harlap -sift -i image.png  -DC 
+
+               ./extract_features_64bit.ln -params har.params -i image.png 
+
+ file format 1:
+vector_dimension
+nb_of_descriptors
+x y a b c desc_1 desc_2 ......desc_vector_dimension
+--------------------
+
+where a(x-u)(x-u)+2b(x-u)(y-v)+c(y-v)(y-v)=1 
+
+ file format 2:
+vector_dimension
+nb_of_descriptors
+x y cornerness scale/patch_size angle object_index  point_type laplacian_value extremum_type mi11 mi12 mi21 mi22 desc_1 ...... desc_vector_dimension
+--------------------
+
+distance=(descA_1-descB_1)^2+...+(descA_vector_dimension-descB_vector_dimension)^2
+
+ input.basis format:
+nb_of_dimensions
+mean_v1
+mean_v2
+.
+.
+mean_vnb_of_dimensions
+nb_of_dimensions*nb_of_pca_vectors
+pca_vector_v1
+pca_vector_v2
+.
+.
+--------------------
+
